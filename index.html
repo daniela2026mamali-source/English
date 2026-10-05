@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f1220" />
+  <meta name="description" content="واژه‌یار — ثبت لغات انگلیسی با معنی و جملهٔ نمونه، فلش‌کارت و آزمون. کاملاً آفلاین." />
+  <title>واژه‌یار — یادگیری لغات انگلیسی</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg" />
+  <link rel="apple-touch-icon" href="icons/icon.svg" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ================= هدر ================= -->
+  <header class="app-header">
+    <div class="brand">
+      <span class="logo">📘</span>
+      <h1>واژه‌یار</h1>
+    </div>
+    <span class="badge" id="wordCount">۰ واژه</span>
+  </header>
+
+  <main id="main">
+
+    <!-- ================= خانه / افزودن ================= -->
+    <section class="view is-active" id="view-home">
+
+      <form class="card" id="wordForm" autocomplete="off">
+        <h2 id="formTitle">افزودن واژهٔ جدید</h2>
+
+        <div class="grid-2">
+          <label class="field">
+            <span>انگلیسی <b>*</b></span>
+            <input id="f-en" type="text" dir="ltr" placeholder="apple" required />
+          </label>
+          <label class="field">
+            <span>فارسی <b>*</b></span>
+            <input id="f-fa" type="text" placeholder="سیب" required />
+          </label>
+        </div>
+
+        <label class="field">
+          <span>جملهٔ نمونه (انگلیسی)</span>
+          <input id="f-ex" type="text" dir="ltr" placeholder="I ate an apple yesterday." />
+        </label>
+
+        <label class="field">
+          <span>معنی جمله (فارسی)</span>
+          <input id="f-exfa" type="text" placeholder="دیروز یک سیب خوردم." />
+        </label>
+
+        <div class="row gap">
+          <button type="submit" class="btn primary" id="submitBtn">ذخیرهٔ واژه</button>
+          <button type="button" class="btn ghost hidden" id="cancelEdit">انصراف</button>
+        </div>
+      </form>
+
+      <div class="card">
+        <div class="row between center wrap gap">
+          <h2>واژه‌های من</h2>
+          <input id="search" class="search" type="search" placeholder="🔍 جستجو…" />
+        </div>
+        <div id="wordList" class="word-list"></div>
+      </div>
+
+    </section>
+
+    <!-- ================= فلش‌کارت ================= -->
+    <section class="view" id="view-cards">
+      <div class="card">
+        <div class="row between center wrap gap">
+          <h2>فلش‌کارت</h2>
+          <div class="segmented" id="fcDir">
+            <button type="button" data-dir="en-fa" class="is-active">انگلیسی ← فارسی</button>
+            <button type="button" data-dir="fa-en">فارسی ← انگلیسی</button>
+          </div>
+        </div>
+
+        <div class="progress"><div class="progress-bar" id="fcProgress"></div></div>
+
+        <div class="flashcard" id="flashcard">
+          <div class="flashcard-inner">
+            <div class="flashcard-face front">
+              <span class="chip" id="fcFrontChip">انگلیسی</span>
+              <div class="fc-word" id="fcFront">—</div>
+              <button type="button" class="icon-btn big" id="fcSpeak" title="تلفظ">🔊</button>
+            </div>
+            <div class="flashcard-face back">
+              <span class="chip" id="fcBackChip">فارسی</span>
+              <div class="fc-word small" id="fcBack">—</div>
+              <div class="fc-example" id="fcExample"></div>
+            </div>
+          </div>
+        </div>
+
+        <p class="hint center">برای دیدن پاسخ، روی کارت بزنید</p>
+
+        <div class="row gap center">
+          <button type="button" class="btn danger grow" id="fcWrong">✗ نمی‌دانستم</button>
+          <button type="button" class="btn success grow" id="fcRight">✓ می‌دانستم</button>
+        </div>
+
+        <div class="row between center mt">
+          <span class="muted" id="fcCounter">۰ / ۰</span>
+          <button type="button" class="btn ghost small" id="fcRestart">🔄 شروع مجدد</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= آزمون ================= -->
+    <section class="view" id="view-quiz">
+
+      <div class="card" id="quizSetup">
+        <h2>آزمون</h2>
+
+        <div class="field">
+          <span>نوع آزمون</span>
+          <div class="segmented wrap" id="quizType">
+            <button type="button" data-type="en2fa" class="is-active">چهارگزینه‌ای (انگلیسی ← فارسی)</button>
+            <button type="button" data-type="fa2en">چهارگزینه‌ای (فارسی ← انگلیسی)</button>
+            <button type="button" data-type="blank">جای خالی</button>
+            <button type="button" data-type="typing">تایپی</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <span>تعداد سؤال</span>
+          <div class="segmented" id="quizCount">
+            <button type="button" data-count="5">۵</button>
+            <button type="button" data-count="10" class="is-active">۱۰</button>
+            <button type="button" data-count="20">۲۰</button>
+            <button type="button" data-count="0">همه</button>
+          </div>
+        </div>
+
+        <button type="button" class="btn primary block" id="startQuiz">شروع آزمون</button>
+      </div>
+
+      <div class="card hidden" id="quizPlay">
+        <div class="row between center">
+          <span class="muted" id="quizProgressText"></span>
+          <span class="badge" id="quizScore">امتیاز: ۰</span>
+        </div>
+
+        <div class="progress"><div class="progress-bar" id="quizProgress"></div></div>
+
+        <p class="quiz-label" id="quizPromptLabel"></p>
+        <div class="quiz-prompt" id="quizPrompt"></div>
+        <div class="quiz-sub muted" id="quizSub"></div>
+
+        <div class="options" id="quizOptions"></div>
+
+        <div class="row gap mt hidden" id="quizTypingRow">
+          <input class="input" id="quizTypingInput" dir="ltr" placeholder="پاسخ را بنویسید…" />
+          <button type="button" class="btn primary" id="quizSubmitTyping">بررسی</button>
+        </div>
+
+        <div class="feedback" id="quizFeedback"></div>
+
+        <button type="button" class="btn primary block hidden" id="quizNext">سؤال بعدی</button>
+      </div>
+
+      <div class="card center hidden" id="quizResult">
+        <div class="result-emoji" id="resultEmoji">🎉</div>
+        <h2 id="resultTitle">پایان آزمون</h2>
+        <p class="result-score" id="resultScore"></p>
+        <p class="muted" id="resultDetail"></p>
+        <div class="row gap center mt">
+          <button type="button" class="btn primary" id="retryQuiz">🔄 آزمون مجدد</button>
+          <button type="button" class="btn ghost" id="backToSetup">تغییر تنظیمات</button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ================= تنظیمات ================= -->
+    <section class="view" id="view-settings">
+
+      <div class="card">
+        <h2>آمار</h2>
+        <div class="stats" id="statsBox"></div>
+      </div>
+
+      <div class="card">
+        <h2>تلفظ</h2>
+        <label class="field">
+          <span>سرعت تلفظ: <b id="rateVal">۰.۹</b></span>
+          <input type="range" id="speechRate" min="0.5" max="1.4" step="0.1" value="0.9" />
+        </label>
+        <button type="button" class="btn ghost block" id="testSpeak">🔊 تست تلفظ</button>
+      </div>
+
+      <div class="card">
+        <h2>پشتیبان‌گیری</h2>
+        <div class="row gap wrap">
+          <button type="button" class="btn ghost" id="exportBtn">⬇️ خروجی JSON</button>
+          <button type="button" class="btn ghost" id="importBtn">⬆️ ورود از فایل</button>
+          <input type="file" id="importFile" accept="application/json,.json" hidden />
+        </div>
+        <p class="muted small-text mt">داده‌ها فقط روی همین دستگاه (localStorage) ذخیره می‌شوند.</p>
+      </div>
+
+      <div class="card">
+        <h2>ابزارها</h2>
+        <div class="row gap wrap">
+          <button type="button" class="btn ghost" id="seedBtn">🌱 افزودن ۵ واژهٔ نمونه</button>
+          <button type="button" class="btn ghost" id="installBtn" hidden>📲 نصب اپلیکیشن</button>
+          <button type="button" class="btn danger" id="resetBtn">🗑️ پاک کردن همهٔ داده‌ها</button>
+        </div>
+      </div>
+
+      <p class="muted center small-text">واژه‌یار — نسخهٔ ۱.۰ — کاملاً آفلاین</p>
+    </section>
+
+  </main>
+
+  <!-- ================= نوار پایین ================= -->
+  <nav class="tabbar">
+    <button type="button" class="tab is-active" data-view="home"><span class="ico">➕</span>واژه‌ها</button>
+    <button type="button" class="tab" data-view="cards"><span class="ico">🃏</span>فلش‌کارت</button>
+    <button type="button" class="tab" data-view="quiz"><span class="ico">📝</span>آزمون</button>
+    <button type="button" class="tab" data-view="settings"><span class="ico">⚙️</span>تنظیمات</button>
+  </nav>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+{
+  "name": "واژه‌یار — یادگیری لغات انگلیسی",
+  "short_name": "واژه‌یار",
+  "description": "ثبت لغات انگلیسی همراه با معنی و جملهٔ نمونه، فلش‌کارت و آزمون — کاملاً آفلاین",
+  "lang": "fa",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "scope": "./",
+  "id": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#0f1220",
+  "theme_color": "#0f1220",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
